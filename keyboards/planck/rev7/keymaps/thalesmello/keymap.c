@@ -22,7 +22,7 @@ enum planck_keycodes { QWERTY = SAFE_RANGE, COLEMAK, DVORAK };
 
 #define LOWER MO(_LOWER)
 #define RAISE MO(_RAISE)
-#define LOWER_OSM_RALT MT(_LOWER, KC_F21)
+#define LOWER_OSM_RALT LT(_LOWER, KC_F21)
 
 /* clang-format off */
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -176,10 +176,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         /* _______, AU_PREV, AU_NEXT, MU_ON,   MU_OFF,  MI_ON,   MI_OFF,  _______, _______, _______, _______, _______, */
         /* _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______ */
 
-        XXXXXXX, XXXXXXX, LALT(KC_RGHT), LALT(KC_RGHT), XXXXXXX, XXXXXXX,       XXXXXXX, KC_PGUP, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        XXXXXXX, XXXXXXX, XXXXXXX,       KC_PGDN,       XXXXXXX, XXXXXXX,       KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, XXXXXXX, XXXXXXX,
-        _______, XXXXXXX, XXXXXXX,       XXXXXXX,       XXXXXXX, LALT(KC_LEFT), XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        _______, _______, _______,       _______,       _______, _______,       _______, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
+        XXXXXXX, QK_BOOT, DB_TOGG, RGB_TOG, RGB_MOD, RGB_HUI, RGB_HUD, RGB_SAI, RGB_SAD, RGB_VAI, RGB_VAD, KC_DEL,
+        EE_CLR,  XXXXXXX, MU_NEXT, AU_ON,   AU_OFF,  XXXXXXX, KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, XXXXXXX, KC_BTN2,
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+        XXXXXXX, _______, XXXXXXX, XXXXXXX, XXXXXXX, _______, KC_BTN1, QWERTY,  COLEMAK, DVORAK,  AG_NORM, AG_SWAP
 ),
 
 [_FN] = LAYOUT_planck_grid(
@@ -215,7 +215,7 @@ float plover_gb_song[][2] = SONG(PLOVER_GOODBYE_SOUND);
 #endif
 
 layer_state_t layer_state_set_user(layer_state_t state) {
-    return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
+    return state;
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -241,9 +241,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             break;
         case LOWER_OSM_RALT:
             if (record->tap.count && record->event.pressed) {
-                set_oneshot_mods(MOD_RALT);
+                set_oneshot_mods(MOD_LALT);
+                return false;
             }
-            return false;
     }
     return true;
 }
